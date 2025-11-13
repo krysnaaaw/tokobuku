@@ -1,0 +1,156 @@
+body {
+    background-color: #e5e5e5;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* === Flash Message === */
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
+}
+.alert.success { background-color: #d4edda; color: #155724; }
+.alert.danger { background-color: #f8d7da; color: #721c24; }
+
+/* === Container Login === */
+.main-container {
+    display: flex;
+    width: 850px;
+    max-width: 95%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* === Kiri: Form === */
+.login-card {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-title {
+    font-size: 26px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input {
+    padding: 10px 40px 10px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-field-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field-container input {
+    width: 100%;
+}
+
+.password-field-container i {
+    position: absolute;
+    right: 12px;
+    color: #888;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.password-field-container i:hover {
+    color: #007bff;
+}
+
+.options-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.login-button:hover { background-color: #0056b3; }
+
+.register-link-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* === Kanan: Logo === */
+.icon-section {
+    flex: 1;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image {
+    width: 80%;
+    max-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .icon-section {
+        display: none;
+    }
+
+    .login-card {
+        padding: 30px;
+    }
+}

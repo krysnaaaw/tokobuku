@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login BooKu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <div class="login-card">
+            <h2 class="login-title">Login BooKu</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="input-group">
+                    <label for="username">Username <span class="required">*</span></label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Kata Sandi <span class="required">*</span></label>
+                    <div class="password-field-container">
+                        <input type="password" id="password" name="password" required>
+                        <i id="togglePassword" class="far fa-eye-slash"></i>
+                    </div>
+                </div>
+
+                <div class="options-container">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember"> Ingat Saya
+                    </label>
+                    <a href="#" class="forgot-password">Lupa kata sandi?</a>
+                </div>
+
+                <button type="submit" class="login-button">Masuk</button>
+
+                <div class="register-link-container">
+                    Belum punya akun? <a href="{{ url_for('register') }}" class="register-link">Daftar</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="icon-section">
+            <img src="{{ url_for('static', filename='image/logo.svg') }}" alt="logo" class="logo-image">
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+</html>

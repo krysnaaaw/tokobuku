@@ -1,0 +1,64 @@
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Sobat Perpus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Pendaftaran BooKu</h2>
+
+        <form class="registration-form" action="#" method="POST">
+            <div class="input-group">
+                <label for="nama-lengkap">Nama Lengkap</label>
+                <input type="text" id="nama-lengkap" name="nama_lengkap" required>
+            </div>
+
+            <div class="input-group">
+                <label for="whatsapp">No. Whatsapp</label>
+                <input type="tel" id="whatsapp" name="whatsapp" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Kata Sandi</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Konfirmasi Kata Sandi</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+
+            <p class="password-note">
+                *Minimal 6 karakter sandi yang kuat dengan simbol dan angka.
+            </p>
+
+            <div class="privacy-consent">
+                <input type="checkbox" id="privacy" name="privacy" required>
+                <label for="privacy">
+                    Saya menyatakan telah membaca dan menyetujui terkait 
+                    <strong>Kebijakan Privasi</strong>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit">Selanjutnya</button>
+
+            <p class="login-link">
+                Sudah memiliki akun? <a href="{{ url_for('home') }}"><strong>Masuk</strong></a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,380 @@
+body { font-family: Arial, sans-serif; background: #f0f0f0; color: #333; margin: 0; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; padding: 0; margin: 0; }
+.main-container { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 250px; padding: 20px; background: #fff;
+    display: flex; flex-direction: column; gap: 20px;
+    border-right: 1px solid #ddd;
+    position: fixed; top: 0; left: 0; height: 100vh;
+}
+
+.sidebar-title { font-size: 1.5em; font-weight: bold; margin-bottom: 20px; }
+.menu-list .menu-item a { display: block; padding: 10px 15px; border-radius: 4px; transition: 0.2s; }
+.menu-list .menu-item a:hover { background: #eee; }
+
+.language-switch h4, .contact-info h4 { margin-bottom: 10px; font-size: .9em; color: #555; }
+.lang-button { display: block; width: 100%; padding: 8px 12px; margin-bottom: 5px; border-radius: 6px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+.active-lang { background: #4682b4; color: #fff; border-color: #4682b4; }
+
+.contact-button { padding: 10px 15px; margin-bottom: 10px; border-radius: 25px; text-align: center; cursor: pointer; font-weight: bold; }
+.email { background: #f0f8ff; border: 1px solid #ccc; }
+.whatsapp { background: #e6ffe6; border: 1px solid #ccc; }
+
+.account-wrapper { margin-top: 20px; display: flex; align-items: center; gap: 10px; }
+.profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #4682b4; }
+.account-btn { padding: 8px 15px; border-radius: 20px; background: #4682b4; color: #fff; text-decoration: none; font-size: 0.85em; transition: 0.2s; }
+.account-btn:hover { background: #365d8b; }
+
+.content-area { flex: 1; padding: 30px; background: #fff; margin-left: 280px; }
+.top-nav-tabs { display: flex; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+.tab { padding: 10px 20px; font-weight: bold; color: #888; }
+.active-tab { color: #4682b4; position: relative; }
+.active-tab::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 3px; background: #4682b4; }
+
+.search-box { margin-left: auto; }
+.search-box input { padding: 8px 15px; border-radius: 25px; border: 1px solid #ccc; width: 250px; }
+
+.banner-area { margin-bottom: 30px; }
+.large-box { width: 100%; height: 200px; border-radius: 8px; background: #f9f9f9; background-size: cover; background-position: center; position: relative; }
+
+.recommendation-area h3 { margin-bottom: 20px; }
+.book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; padding-bottom: 10px; }
+
+.book-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; position: relative; transition: box-shadow 0.3s; }
+.book-card:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+.love-icon { position: absolute; top: 15px; right: 15px; background: #fff; border: 1px solid #ccc; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; z-index: 10; }
+.love-icon:hover { color: #ff4747; border-color: #ff4747; }
+
+.book-image { width: 100%; height: 180px; margin-bottom: 10px; background-size: cover; background-position: center top; border-radius: 4px; flex-shrink: 0; }
+.book-details { padding: 5px 0; }
+.book-details .author { font-size: 0.8em; color: #888; margin-bottom: 2px; }
+.book-details .title { font-size: 0.9em; font-weight: bold; margin: 0 0 5px 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; height: 2.2em; }
+
+.price-discount { display: flex; align-items: center; margin-bottom: 5px; }
+.price-old { text-decoration: line-through; color: #aaa; font-size: 0.75em; margin-right: 5px; }
+.discount-percent { background: #ffe0e0; color: #ff4747; font-size: 0.7em; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
+.price-new { color: #333; font-size: 1em; font-weight: bold; margin: 0; }
+
+.information-area { margin-top: 30px; }
+.info-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+.info-placeholder { height: 120px; border-radius: 8px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; }
+
+/* ==== RESET ==== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+/* ==== STRUKTUR ==== */
+.main-container {
+  display: flex;
+  position: relative;
+}
+
+/* ==== SIDEBAR ==== */
+.sidebar {
+  width: 250px;
+  background: #ffffff;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+.sidebar.hide {
+  transform: translateX(-100%);
+}
+
+.sidebar-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.menu-list { list-style: none; }
+.menu-item a {
+  display: block;
+  color: #000000;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+.menu-item a:hover { background: rgba(255,255,255,0.1); }
+
+.language-switch, .contact-info, .account-wrapper {
+  margin-top: 20px;
+}
+.lang-button {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  margin: 5px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.lang-button:hover { background: rgba(255,255,255,0.2); }
+.active-lang { background: rgba(255,255,255,0.3); }
+
+.contact-button {
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  padding: 8px;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.contact-button:hover { background: rgba(255,255,255,0.2); }
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.account-btn {
+  color: #fff;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+/* ==== TOGGLE BUTTON ==== */
+.toggle-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  z-index: 1000;
+}
+.toggle-btn:hover {
+  background: #333;
+}
+
+/* ==== KONTEN UTAMA ==== */
+.content-area {
+  margin-left: 250px;
+  width: 100%;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.hide ~ .content-area {
+  margin-left: 0;
+}
+
+.top-nav-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+.tab {
+  color: #333;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.active-tab { font-weight: bold; }
+.search-box input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Banner */
+.banner-area .large-box {
+  margin: 20px 0;
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Buku */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+.book-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 10px;
+}
+.book-image {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+.book-details {
+  padding: 10px;
+}
+.price-old {
+  text-decoration: line-through;
+  margin-right: 6px;
+  color: gray;
+}
+.discount-percent {
+  background: red;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.love-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffff;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* Informasi */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+.info-placeholder {
+  height: 100px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* === Toggle Sidebar === */
+.sidebar {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.hide {
+  transform: translateX(-100%);
+}
+
+.toggle-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s;
+}
+
+.toggle-btn:hover {
+  background: #555;
+}
+
+.information-area {
+  margin-top: 40px;
+}
+
+.information-area h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #222;
+}
+
+.genre-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.genre-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.genre-btn {
+  flex: 0 0 auto;
+  background-color: #f2f4f8;
+  border: 1px solid #dcdcdc;
+  border-radius: 25px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.genre-btn:hover {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+  transform: translateY(-2px);
+}
+
+/* Genre buttons styling (jika belum ada) */
+.genre-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0 18px;
+  scrollbar-width: none;
+  margin-bottom: 16px;
+}
+.genre-container::-webkit-scrollbar{ display:none; }
+
+.genre-btn {
+  flex: 0 0 auto;
+  background: #f2f4f8;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 22px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.18s, transform 0.12s, color 0.18s;
+}
+.genre-btn:hover { transform: translateY(-2px); }
+.genre-btn.active {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* hide class untuk menyembunyikan book-card tanpa memecah grid */
+.book-card.hidden {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  height: 0;            /* kecilkan agar tidak menyisakan spasi */
+  margin: 0;            /* agar grid beradaptasi */
+  padding: 0;
+  overflow: hidden;
+}
+
+/* saat tampil kembali */
+.book-card {
+  transition: opacity 180ms ease, transform 180ms ease, margin 180ms ease, height 180ms ease, padding 180ms ease;
+}

@@ -1,0 +1,101 @@
+body {
+    background-color: #e5e5e5;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden; /* halaman tidak bisa di-scroll */
+}
+
+/* Container utama */
+.form-container {
+    background-color: #ffffff;
+    padding: 40px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 400px;
+    max-height: 100vh; /* tidak boleh melebihi tinggi layar */
+    overflow-y: auto; /* biar bagian dalam bisa discroll kalau kepanjangan */
+}
+
+/* Judul */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Grup input */
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input {
+    padding: 12px 10px; /* tinggi input lebih nyaman */
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    height: 40px; /* pastikan tinggi sama */
+    box-sizing: border-box;
+}
+
+/* Catatan sandi */
+.password-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+/* Persetujuan privasi */
+.privacy-consent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Tombol submit */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a67b5;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #3a5795;
+}
+
+/* Link login */
+.login-link {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.login-link a {
+    color: #4a67b5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Scrollbar halus dan elegan */
+.form-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 10px;
+}
