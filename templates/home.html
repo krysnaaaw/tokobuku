@@ -1,192 +1,127 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toko Buku Online</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booku Store - Toko Buku Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-<button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-
-<div class="main-container">
-    <aside class="sidebar">
-        <h2 class="sidebar-title">Toko Buku</h2>
-        <nav>
-            <ul class="menu-list">
-                <li class="menu-item"><a href="#">Beranda</a></li>
-                <li class="menu-item"><a href="#">Pameran</a></li>
-                <li class="menu-item"><a href="#">Keranjang</a></li>
-                <li class="menu-item"><a href="#">Buku Favorit</a></li>
-                <li class="menu-item"><a href="#">Aktivitas</a></li>
-            </ul>
-        </nav>
-
-        <div class="contact-info">
-            <h4>Hubungi Kami</h4>
-            <div class="contact-button email">📧 Email</div>
-            <div class="contact-button whatsapp">📱 Whatsapp</div>
-        </div>
-
-        <div class="account-wrapper">
-            <img src="https://picsum.photos/50" alt="Profil" class="profile-pic">
-            <a href="#" class="account-btn">Akun</a>
-        </div>
-    </aside>
-
-    <main class="content-area">
-        <nav class="top-nav-tabs">
-            <a href="#" class="tab active-tab">Beranda</a>
-            <a href="#" class="tab">Favorit</a>
-            <a href="#" class="tab">Keranjang</a>
-            <div class="search-box">
-                <input type="text" placeholder="Cari Judul/Penerbit">
-            </div>
-        </nav>
-
-        <section class="banner-area">
-            <div class="large-box" style="background-image:url('https://picsum.photos/1200/300?blur=2');"></div>
-        </section>
-
-        <section class="recommendation-area">
-            <h3>Rekomendasi Buku</h3>
-            <div class="book-grid">
-                <div class="book-card"  data-genre="fiksi,sastra">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786020366517_Cantik-Itu-Luka-Hard-Cover---Limited-Edition.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Eka Kurniawan</p>
-                        <h4 class="title">Cantik Itu Luka</h4>
-                        <p class="price-discount"><span class="price-old">Rp 74.250</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 51.750</p>
-                    </div>
-                </div>
-
-                <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786020318431_Hujan-Bulan-Juni-Sebuah-Novel.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Sapardi Djoko Damono</p>
-                        <h4 class="title">Hujan Bulan Juni</h4>
-                        <p class="price-discount"><span class="price-old">Rp 90.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 80.750</p>
-                    </div>
-                </div>
-
-                <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786020639321_MALICE.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Keigo Higashino</p>
-                        <h4 class="title">Malice - Catatan Pembunuhan Sang Novelis</h4>
-                        <p class="price-discount"><span class="price-old">Rp 57.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 51.300</p>
-                    </div>
-                </div>
-
-                <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024244071_Dengarlah-Nyanyian-Angin-Cover-Baru-2018.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Dengarlah Nyanyian Angin</h4>
-                        <p class="price-discount"><span class="price-old">Rp 90.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 80.100</p>
-                    </div>
-                </div>
-
-                <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                 <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                 <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                 <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                 <div class="book-card">
-                    <button class="love-icon"><i class="far fa-heart"></i></button>
-                    <div class="book-image" style="background-image:url('https://cdn.gramedia.com/uploads/items/9786024248369_TSUKURU-TAZAKI-TANPA-WARNA-DAN-TAHUN-ZIARAHNYA.jpg');"></div>
-                    <div class="book-details">
-                        <p class="author">Haruki Murakami</p>
-                        <h4 class="title">Novel Tsukuru Tazaki Tanpa Warna dan Tahun Ziarahnya</h4>
-                        <p class="price-discount"><span class="price-old">Rp 85.000</span><span class="discount-percent">10%</span></p>
-                        <p class="price-new">Rp 74.250</p>
-                    </div>
-                </div>
-
-                
-            </div>
-        </section>
+    <header class="top-header">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button> 
+        <div class="logo">Booku</div>
         
-        <hr>
+        <div class="search-bar-container">
+            <input type="text" placeholder="Cari Judul/Penulis/ISBN...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        
+        <a href="#" class="cart-icon" id="cartIcon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+    </header>
 
-        <section class="information-area">
-  <h3>Genre Populer</h3>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" id="nav-beranda"><i class="fas fa-home"></i> Beranda</a>
+                <a href="#" id="nav-kategori" data-action="kategori"><i class="fas fa-list"></i> Telusuri Kategori</a>
+                <a href="#" id="nav-pesanan" data-action="pesanan"><i class="fas fa-shipping-fast"></i> Status Pesanan</a>
+                <a href="#" id="nav-wishlist" data-action="wishlist"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="#" id="nav-diskusi" data-action="diskusi"><i class="fas fa-comments"></i> Diskusi</a>
+            </nav>
+            <div class="contact-info">
+                <p>Hubungi Kami</p>
+                <a href="#"><i class="fas fa-envelope"></i> Email</a>
+                <a href="#"><i class="fab fa-whatsapp"></i> Whatsapp</a>
+            </div>
+            
+            <div class="account-links-sidebar">
+                <a href="{{ url_for('login_page') }}" class="btn-sidebar-auth btn-login-sidebar"><i class="fas fa-sign-in-alt"></i> Masuk</a>
+                <a href="{{ url_for('register') }}" class="btn-sidebar-auth btn-register-sidebar"><i class="fas fa-user-plus"></i> Daftar</a>
+            </div>
+        </aside>
 
-  <div class="genre-container">
-    <button class="genre-btn active" data-genre="all">Semua</button>
-    <button class="genre-btn" data-genre="fiksi">Fiksi</button>
-    <button class="genre-btn" data-genre="puisi">Puisi</button>
-    <button class="genre-btn" data-genre="misteri">Misteri</button>
-    <button class="genre-btn" data-genre="sastra">Sastra</button>
-    <button class="genre-btn" data-genre="romantis">Romantis</button>
-    <button class="genre-btn" data-genre="biografi">Biografi</button>
-    <button class="genre-btn" data-genre="komik">Komik</button>
-  </div>
-</section>
+        <main class="main-content">
+            <section class="hero-banner">
+                <h2>DISC 50% untuk Semua Fiksi!</h2>
+                <p>Koleksi terbatas, belanja sekarang juga.</p>
+            </section>
 
-    </main>
-</div>
+            <section class="book-recommendations">
+                <h3>📚 Buku Rekomendasi</h3>
+                <div class="book-list">
+                    <div class="book-card">
+                        <div class="cover-placeholder"></div>
+                        <h4 class="book-title">Judul Buku Fantasi</h4>
+                        <p class="book-author">Penulis Terkenal</p>
+                        <div class="price">
+                            <span class="old-price">Rp 120.000</span>
+                            <span class="current-price">Rp 60.000</span>
+                        </div>
+                        <button class="btn-buy" data-book-id="1">Tambah ke Keranjang</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="cover-placeholder"></div>
+                        <h4 class="book-title">Buku Sejarah Dunia</h4>
+                        <p class="book-author">Ahli Sejarah</p>
+                        <div class="price"><span class="current-price">Rp 85.000</span></div>
+                        <button class="btn-buy" data-book-id="2">Tambah ke Keranjang</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="cover-placeholder"></div>
+                        <h4 class="book-title">Pelajaran Coding</h4>
+                        <p class="book-author">Coder Pro</p>
+                        <div class="price"><span class="current-price">Rp 150.000</span></div>
+                        <button class="btn-buy" data-book-id="3">Tambah ke Keranjang</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="cover-placeholder"></div>
+                        <h4 class="book-title">Resep Masakan</h4>
+                        <p class="book-author">Chef Terkenal</p>
+                        <div class="price"><span class="current-price">Rp 90.000</span></div>
+                        <button class="btn-buy" data-book-id="4">Tambah ke Keranjang</button>
+                    </div>
+                </div>
+            </section>
 
-<script src="{{ url_for('static', filename='home.js') }}"></script>
+            <section class="popular-categories">
+                <h3>✨ Telusuri Kategori Populer</h3>
+                <div class="category-grid">
+                    <div class="category-item"><i class="fas fa-scroll"></i> Fiksi</div>
+                    <div class="category-item"><i class="fas fa-lightbulb"></i> Non-fiksi</div>
+                    <div class="category-item"><i class="fas fa-flask"></i> Sains & Teknologi</div>
+                    <div class="category-item"><i class="fas fa-paint-brush"></i> Seni & Desain</div>
+                </div>
+            </section>
+
+            <section class="store-info">
+                <h3>ℹ️ Layanan Pelanggan & Info Toko</h3>
+                <div class="info-grid">
+                    <div class="info-col">
+                        <h4>Tentang Kami</h4>
+                        <ul><li>Sejarah Toko</li><li>Karir</li></ul>
+                    </div>
+                    <div class="info-col">
+                        <h4>Bantuan & Pembayaran</h4>
+                        <ul><li>FAQ</li><li>Metode Pembayaran</li></ul>
+                    </div>
+                    <div class="info-col">
+                        <h4>Kebijakan</h4>
+                        <ul><li>Syarat & Ketentuan</li><li>Privasi</li></ul>
+                    </div>
+                    <div class="info-col">
+                        <h4>Ikuti Kami</h4>
+                        <ul><li><i class="fab fa-instagram"></i> Instagram</li><li><i class="fab fa-facebook"></i> Facebook</li></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='home.js') }}"></script>
 </body>
 </html>
