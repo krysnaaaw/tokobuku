@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sistem Upload Buku</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f6f6f6;
+    }
+    .upload-container {
+        width: 500px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        margin: 0 auto;
+    }
+    h2 {
+        margin-bottom: 15px;
+    }
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+    input, textarea {
+        width: 96%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-top: 5px;
+    }
+    .preview-box {
+        width: 100%;
+        height: 250px;
+        border: 2px dashed #aaa;
+        border-radius: 10px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fafafa;
+        overflow: hidden;
+    }
+    .preview-box img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        margin-top: 15px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+
+<div class="upload-container">
+    <h2 align="center">Upload Buku</h2>
+
+    <label>Judul Buku</label>
+    <input type="text" placeholder="Masukkan judul buku..." />
+
+    <label>Harga Buku</label>
+    <input type="number" placeholder="Masukkan harga buku..." />
+
+    <label>Deskripsi</label>
+    <textarea rows="3" placeholder="Masukkan deskripsi buku..."></textarea>
+
+    <label>Upload Cover Buku</label>
+    <input type="file" id="fileInput" accept="image/*" />
+
+    <div class="preview-box" id="previewBox">Preview Gambar</div>
+
+        <label>Penulis Buku</label>
+    <input type="text" placeholder="Masukkan nama penulis..." />
+
+    <label>Bahasa</label>
+    <input type="text" placeholder="Contoh: Indonesia" />
+
+    <label>Jumlah Halaman</label>
+    <input type="number" placeholder="Masukkan total halaman..." />
+
+    <label>Panjang Buku (cm)</label>
+    <input type="text" placeholder="Contoh: 17.2" />
+
+    <label>Lebar Buku (cm)</label>
+    <input type="text" placeholder="Contoh: 12.5" />
+
+    <label>Cetakan ke-</label>
+    <input type="number" placeholder="Contoh: 1" />
+
+    <button>Upload Buku</button>
+</div>
+
+<script>
+    const fileInput = document.getElementById("fileInput");
+    const previewBox = document.getElementById("previewBox");
+
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewBox.innerHTML = `<img src="${e.target.result}" />`;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+
+</body>
+</html>
