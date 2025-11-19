@@ -6,6 +6,7 @@
     <title>Login BooKu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <script src="{{ url_for('static', filename='login.js') }}" defer></script>
 </head>
 <body>
     <div class="main-container">
@@ -53,7 +54,5 @@
             <img src="{{ url_for('static', filename='image/logo.svg') }}" alt="logo" class="logo-image">
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='login.js') }}"></script>
 </body>
 </html>

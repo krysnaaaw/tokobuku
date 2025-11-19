@@ -1,0 +1,190 @@
+/* ==================================== */
+/* === GAYA KHUSUS HALAMAN DETAIL BUKU === */
+/* ==================================== */
+
+/* HEADER KONTEN UTAMA */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.book-title-section h1 {
+    font-size: 2em;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+.book-title-section p {
+    font-size: 1.1em;
+    color: #7f8c8d;
+}
+
+/* BAGIAN ATAS: COVER, HARGA, & AKSI */
+.book-details-top {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+.cover-display {
+    width: 300px;
+    height: 400px;
+    background: #ecf0f1;
+    border: 1px dashed #bdc3c7;
+    border-radius: 4px;
+    flex-shrink: 0;
+    /* PENTING: Untuk memastikan gambar mengisi wadah */
+    overflow: hidden; 
+}
+.book-cover-image {
+    width: 100%; /* Membuat gambar mengisi lebar wadah .cover-display */
+    height: 100%; /* Membuat gambar mengisi tinggi wadah .cover-display */
+    object-fit: cover; /* Penting: Memotong gambar agar pas tanpa distorsi, menjaga rasio aspek */
+    display: block; /* Menghapus spasi default di bawah gambar */
+}
+.action-area {
+    flex-grow: 1;
+}
+
+/* TOMBOL AKSI SAMPING (Wishlist & Share) */
+.action-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.action-header button {
+    background: none;
+    border: 1px solid #bdc3c7;
+    color: #555;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background .2s;
+    font-size: 0.9em;
+}
+.action-header button:hover {
+    background: #ecf0f1;
+}
+.action-header button.favorited {
+    background-color: #e74c3c;
+    color: #fff;
+    border-color: #e74c3c;
+}
+
+/* INFORMASI HARGA */
+.price-info {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.old-price-detail {
+    text-decoration: line-through;
+    color: #95a5a6;
+    font-size: 1.1em;
+}
+.current-price-detail {
+    color: #e74c3c; /* Warna merah untuk harga diskon */
+    font-weight: bold;
+    font-size: 2.2em; /* Harga utama sangat dominan */
+}
+
+/* INFORMASI KETERSEDIAAN */
+.stock-info {
+    margin-bottom: 20px;
+    font-size: 1em;
+    line-height: 1.5;
+}
+.stock-info strong {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+/* TOMBOL AKSI BELI */
+.btn-buy {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background .2s;
+    width: 100%; 
+    margin-bottom: 10px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-buy:hover {
+    background: #2980b9;
+}
+
+.btn-buy-now {
+    background: #27ae60; /* Warna berbeda untuk "Beli Sekarang" */
+}
+.btn-buy-now:hover {
+    background: #229954;
+}
+
+/* BAGIAN BAWAH: DETAIL TEKNIS & SINOPSIS */
+.book-details-bottom {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Detail : Sinopsis = 1 : 2 */
+    gap: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+}
+.technical-details, .sinopsis {
+    line-height: 1.6;
+}
+.technical-details h3, .sinopsis h3 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    color: #3498db;
+}
+
+/* GAYA TABEL DETAIL TEKNIS */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.detail-table tr {
+    border-bottom: 1px solid #eee;
+}
+.detail-table td {
+    padding: 8px 0;
+    font-size: 0.95em;
+}
+.detail-table td:first-child {
+    font-weight: 500;
+    color: #555;
+    width: 40%;
+}
+.sinopsis p {
+    text-align: justify;
+}
+
+/* ====================================== */
+/* === MEDIA QUERIES (RESPONSIF) === */
+/* ====================================== */
+@media (max-width: 1024px) {
+    .book-details-top {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    .book-details-bottom {
+        grid-template-columns: 1fr; /* Tumpuk Detail dan Sinopsis */
+    }
+    .cover-display {
+        width: 250px;
+        height: 350px;
+    }
+    .current-price-detail {
+        font-size: 1.8em;
+    }
+}

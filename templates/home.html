@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booku Store - Toko Buku Online</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="{{ url_for('static', filename='home.js') }}" defer></script>
 </head>
+
 <body>
 
     <header class="top-header">
-        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button> 
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
         <div class="logo">Booku</div>
-        
+
         <div class="search-bar-container">
             <input type="text" placeholder="Cari Judul/Penulis/ISBN...">
             <button><i class="fas fa-search"></i></button>
         </div>
-        
+
         <a href="#" class="cart-icon" id="cartIcon">
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-count" id="cartCount">0</span>
@@ -29,7 +32,8 @@
             <nav class="sidebar-nav">
                 <a href="#" id="nav-beranda"><i class="fas fa-home"></i> Beranda</a>
                 <a href="#" id="nav-kategori" data-action="kategori"><i class="fas fa-list"></i> Telusuri Kategori</a>
-                <a href="#" id="nav-pesanan" data-action="pesanan"><i class="fas fa-shipping-fast"></i> Status Pesanan</a>
+                <a href="#" id="nav-pesanan" data-action="pesanan"><i class="fas fa-shipping-fast"></i> Status
+                    Pesanan</a>
                 <a href="#" id="nav-wishlist" data-action="wishlist"><i class="fas fa-heart"></i> Wishlist</a>
                 <a href="#" id="nav-diskusi" data-action="diskusi"><i class="fas fa-comments"></i> Diskusi</a>
             </nav>
@@ -38,10 +42,20 @@
                 <a href="#"><i class="fas fa-envelope"></i> Email</a>
                 <a href="#"><i class="fab fa-whatsapp"></i> Whatsapp</a>
             </div>
-            
             <div class="account-links-sidebar">
-                <a href="{{ url_for('login_page') }}" class="btn-sidebar-auth btn-login-sidebar"><i class="fas fa-sign-in-alt"></i> Masuk</a>
-                <a href="{{ url_for('register') }}" class="btn-sidebar-auth btn-register-sidebar"><i class="fas fa-user-plus"></i> Daftar</a>
+                {% if session.logged_in %}
+                <a href="{{ url_for('profile') }}" class="btn-sidebar-auth btn-login-sidebar"><i
+                        class="fas fa-user-circle"></i> Profil Saya</a>
+                <form action="{{ url_for('logout') }}" method="POST" style="margin: 0;">
+                    <button type="submit" class="btn-sidebar-auth btn-register-sidebar"
+                        style="width: 100%; border: none;"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('login_page') }}" class="btn-sidebar-auth btn-login-sidebar"><i
+                        class="fas fa-sign-in-alt"></i> Masuk</a>
+                <a href="{{ url_for('register') }}" class="btn-sidebar-auth btn-register-sidebar"><i
+                        class="fas fa-user-plus"></i> Daftar</a>
+                {% endif %}
             </div>
         </aside>
 
@@ -54,37 +68,28 @@
             <section class="book-recommendations">
                 <h3>📚 Buku Rekomendasi</h3>
                 <div class="book-list">
-                    <div class="book-card">
-                        <div class="cover-placeholder"></div>
-                        <h4 class="book-title">Judul Buku Fantasi</h4>
-                        <p class="book-author">Penulis Terkenal</p>
-                        <div class="price">
-                            <span class="old-price">Rp 120.000</span>
-                            <span class="current-price">Rp 60.000</span>
-                        </div>
-                        <button class="btn-buy" data-book-id="1">Tambah ke Keranjang</button>
-                    </div>
-                    <div class="book-card">
-                        <div class="cover-placeholder"></div>
-                        <h4 class="book-title">Buku Sejarah Dunia</h4>
-                        <p class="book-author">Ahli Sejarah</p>
-                        <div class="price"><span class="current-price">Rp 85.000</span></div>
-                        <button class="btn-buy" data-book-id="2">Tambah ke Keranjang</button>
-                    </div>
-                    <div class="book-card">
-                        <div class="cover-placeholder"></div>
-                        <h4 class="book-title">Pelajaran Coding</h4>
-                        <p class="book-author">Coder Pro</p>
-                        <div class="price"><span class="current-price">Rp 150.000</span></div>
-                        <button class="btn-buy" data-book-id="3">Tambah ke Keranjang</button>
-                    </div>
-                    <div class="book-card">
-                        <div class="cover-placeholder"></div>
-                        <h4 class="book-title">Resep Masakan</h4>
-                        <p class="book-author">Chef Terkenal</p>
-                        <div class="price"><span class="current-price">Rp 90.000</span></div>
-                        <button class="btn-buy" data-book-id="4">Tambah ke Keranjang</button>
-                    </div>
+                    {% if buku_list %}
+                        {% for buku in buku_list %}
+                            <!-- Card Buku dari Database -->
+                            <a href="{{ url_for('detail_buku', buku_id=buku.id_buku) }}" class="book-card-link">
+                                <div class="book-card">
+                                    <!-- Menampilkan cover buku dengan fallback jika gambar tidak ditemukan -->
+                                    <img src="{{ url_for('static', filename='image/cover/' + buku.gambar) }}"
+                                         onerror="this.onerror=null; this.src='https://placehold.co/150x220/f0f0f0/666666?text=No+Cover';"
+                                         alt="Cover {{ buku.judul }}" class="book-cover-img">
+                                    
+                                    <div class="book-info">
+                                        <h4 class="book-title">{{ buku.judul }}</h4>
+                                        <p class="book-author">{{ buku.penulis }}</p>
+                                        <div class="price">
+                                            <span class="current-price">Rp{{ '{:,.0f}'.format(buku.harga) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
                 </div>
             </section>
 
@@ -103,25 +108,35 @@
                 <div class="info-grid">
                     <div class="info-col">
                         <h4>Tentang Kami</h4>
-                        <ul><li>Sejarah Toko</li><li>Karir</li></ul>
+                        <ul>
+                            <li>Sejarah Toko</li>
+                            <li>Karir</li>
+                        </ul>
                     </div>
                     <div class="info-col">
                         <h4>Bantuan & Pembayaran</h4>
-                        <ul><li>FAQ</li><li>Metode Pembayaran</li></ul>
+                        <ul>
+                            <li>FAQ</li>
+                            <li>Metode Pembayaran</li>
+                        </ul>
                     </div>
                     <div class="info-col">
                         <h4>Kebijakan</h4>
-                        <ul><li>Syarat & Ketentuan</li><li>Privasi</li></ul>
+                        <ul>
+                            <li>Syarat & Ketentuan</li>
+                            <li>Privasi</li>
+                        </ul>
                     </div>
                     <div class="info-col">
                         <h4>Ikuti Kami</h4>
-                        <ul><li><i class="fab fa-instagram"></i> Instagram</li><li><i class="fab fa-facebook"></i> Facebook</li></ul>
+                        <ul>
+                            <li><i class="fab fa-instagram"></i> Instagram</li>
+                            <li><i class="fab fa-facebook"></i> Facebook</li>
+                        </ul>
                     </div>
                 </div>
             </section>
         </main>
     </div>
-
-    <script src="{{ url_for('static', filename='home.js') }}"></script>
 </body>
 </html>

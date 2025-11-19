@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sistem Upload Buku</title>
+<style>
+    /* Reset sederhana */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f6f6f6;
+    }
+
+    .upload-container {
+        max-width: 500px;
+        padding: 25px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin: 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 15px;
+        display: block;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-top: 5px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Fokus input */
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+    }
+
+    /* Hilangkan autofill kuning Chrome */
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+        -webkit-text-fill-color: #000;
+    }
+
+    .preview-box {
+        width: 100%;
+        height: 250px;
+        border: 2px dashed #aaa;
+        border-radius: 10px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fafafa;
+        overflow: hidden;
+        color: #888;
+        font-weight: bold;
+    }
+
+    .preview-box img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.2s;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+</style>
+</head>
+<body>
+<div class="upload-container">
+    <h2>Upload Buku</h2>
+
+    <form action="{{ url_for('upload_buku') }}" method="POST" enctype="multipart/form-data">
+        <label>Judul Buku</label>
+        <input type="text" name="judul" placeholder="Masukkan judul buku..." required />
+
+        <label>Penulis Buku</label>
+        <input type="text" name="penulis" placeholder="Masukkan nama penulis..." required />
+        
+        <label>Penerbit</label>
+        <input type="text" name="penerbit" placeholder="Contoh: Gramedia Pustaka Utama" required />
+        
+        <label>ISBN</label>
+        <input type="text" name="isbn" placeholder="Contoh: 978-602-03-3291-7" />
+        
+        <label>Tanggal Terbit</label>
+        <input type="date" name="tanggal_terbit" />
+        
+        <label>Kategori</label>
+        <input type="text" name="kategori" placeholder="Contoh: Fiksi, Sains, Sejarah" />
+        
+        <label>Harga Buku (Rp)</label>
+        <input type="number" name="harga" placeholder="Masukkan harga buku..." required />
+        
+        <label>Stok</label>
+        <input type="number" name="stok" placeholder="Jumlah stok tersedia..." required />
+        <label>Deskripsi</label>
+        <textarea rows="3" name="deskripsi" placeholder="Masukkan deskripsi buku..."></textarea>
+        
+        <label>Upload Cover Buku</label>
+        <input type="file" id="fileInput" name="cover_file" accept="image/*" required />
+        <div class="preview-box" id="previewBox">Preview Gambar</div>
+
+        <label>Bahasa</label>
+        <input type="text" name="bahasa" placeholder="Contoh: Indonesia" />
+
+        <label>Jumlah Halaman</label>
+        <input type="number" name="jml_halaman" placeholder="Masukkan total halaman..." />
+
+        <label>Panjang Buku (cm)</label>
+        <input type="number" step="0.1" name="panjang" placeholder="Contoh: 17.2" />
+
+        <label>Lebar Buku (cm)</label>
+        <input type="number" step="0.1" name="lebar" placeholder="Contoh: 12.5" />
+
+        <button type="submit">Upload Buku</button>
+    </form>
+</div>
+
+<script>
+    const fileInput = document.getElementById("fileInput");
+    const previewBox = document.getElementById("previewBox");
+
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewBox.innerHTML = `<img src="${e.target.result}" />`;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+</body>
+</html>

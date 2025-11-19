@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi - {{ buku.judul if buku else 'Buku Tidak Ditemukan' }}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='isibuku.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='isibuku.js') }}" defer></script>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button> 
+        <div class="logo">Booku Store</div>
+        
+        <div class="search-bar-container">
+            <input type="text" placeholder="Cari Judul/Penulis/ISBN..."> 
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        
+        <a href="#" class="cart-icon" id="cartIcon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+    </header>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}" id="nav-beranda"><i class="fas fa-home"></i> Beranda</a>
+                <a href="#"><i class="fas fa-list"></i> Telusuri Kategori</a>
+                <a href="#"><i class="fas fa-shipping-fast"></i> Status Pesanan</a>
+                <a href="#"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="#"><i class="fas fa-comments"></i> Diskusi</a>
+            </nav>
+
+            <div class="contact-info">
+                <p>Hubungi Kami</p>
+                <a href="#"><i class="fas fa-envelope"></i> Email</a>
+                <a href="#"><i class="fab fa-whatsapp"></i> Whatsapp</a>
+            </div>
+
+            <div class="account-links-sidebar">
+                {% if session.logged_in %}
+                    <a href="{{ url_for('profile') }}" class="btn-sidebar-auth btn-login-sidebar">
+                        <i class="fas fa-user-circle"></i> Profil Saya
+                    </a>
+                    <form action="{{ url_for('logout') }}" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn-sidebar-auth btn-register-sidebar" style="width: 100%; border: none;">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{{ url_for('login_page') }}" class="btn-sidebar-auth btn-login-sidebar">
+                        <i class="fas fa-sign-in-alt"></i> Masuk
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn-sidebar-auth btn-register-sidebar">
+                        <i class="fas fa-user-plus"></i> Daftar
+                    </a>
+                {% endif %}
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- Judul Buku -->
+            <div class="content-header">
+                <div class="book-title-section">
+                    <h1>{{ buku.judul or 'Judul Tidak Ada' }}</h1>
+                    <p>{{ buku.penulis or 'Penulis Tidak Ada' }}</p>
+                </div>
+            </div>
+
+            <!-- Detail Atas Buku -->
+            <div class="book-details-top">
+                <div class="cover-display">
+                    {% if buku.gambar %}
+                        <img src="{{ url_for('static', filename='image/cover/' + buku.gambar) }}" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/300x400/f0f0f0/666666?text=No+Cover';"
+                             alt="Cover {{ buku.judul }}" class="book-cover-image">
+                    {% else %}
+                        <img src="https://placehold.co/300x400/f0f0f0/666666?text=No+Cover" 
+                             alt="No Cover" class="book-cover-image">
+                    {% endif %}
+                </div>
+
+                <div class="action-area">
+                    <div class="action-header">
+                        <button id="favorite-btn"><i class="fas fa-heart"></i> Wishlist</button>
+                        <button id="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+
+                    <div class="price-info">
+                        <span class="current-price-detail" id="book-price">
+                            Rp {{ '{:,.0f}'.format(buku.harga) }}
+                        </span>
+                    </div>
+
+                    <div class="stock-info">
+                        <p>Stok: <strong id="available-stock">{{ buku.stok or 0 }}</strong> unit tersedia</p>
+                    </div>
+
+                    <button class="btn-buy" id="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Tambah ke Keranjang</button>
+                    <button class="btn-buy btn-buy-now" id="buy-now-btn">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- Detail Bawah Buku -->
+            <div class="book-details-bottom">
+                <div class="technical-details">
+                    <h3>Detail Buku</h3>
+                    <table class="detail-table">
+                        <tr><td>Penerbit</td><td>{{ buku.penerbit or '-' }}</td></tr>
+                        <tr><td>Tanggal Terbit</td><td>{{ buku.tanggal_terbit or '-' }}</td></tr>
+                        <tr><td>ISBN</td><td>{{ buku.isbn or '-' }}</td></tr>
+                        <tr><td>Bahasa</td><td>{{ buku.bahasa or 'Indonesia' }}</td></tr>
+                        <tr><td>Halaman</td><td>{{ buku.halaman or '-' }} Halaman</td></tr>
+                        <tr><td>Panjang</td><td>{{ "%.1f cm"|format(buku.panjang) if buku.panjang else '-' }}</td></tr>
+                        <tr><td>Lebar</td><td>{{ "%.1f cm"|format(buku.lebar) if buku.lebar else '-' }}</td></tr>
+                    </table>
+                </div>
+
+                <div class="sinopsis">
+                    <h3>Sinopsis</h3>
+                    <p>{{ buku.deskripsi or 'Sinopsis belum tersedia untuk buku ini.' }}</p>
+                </div>
+            </div>
+        </main>
+
+    </div>
+</body>
+</html>
