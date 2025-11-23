@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Orders - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>📦 Manage Orders</h1>
+            <p>Kelola semua pesanan</p>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+        </div>
+
+        <div class="admin-content">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td><strong>#{{ order.id }}</strong></td>
+                            <td>{{ order.user.username }}</td>
+                            <td>Rp {{ "{:,.0f}".format(order.total_amount) }}</td>
+                            <td>
+                                <span class="status-badge status-{{ order.status }}">
+                                    {{ order.status|title }}
+                                </span>
+                            </td>
+                            <td>{{ order.payment_method|replace('_', ' ')|title }}</td>
+                            <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="status-form">
+                                    <select name="status" class="status-select">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                        <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>Paid</option>
+                                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.status-form {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.status-select {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-paid {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-shipped {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-delivered {
+    background: #28a745;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        min-width: 800px;
+    }
+    
+    .status-form {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+</style>
+{% endblock %}

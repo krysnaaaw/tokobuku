@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Diskusi Saya - Toko Buku Online{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="my-discussions">
+        <div class="page-header">
+            <h1>📝 Diskusi Saya</h1>
+            <div class="header-actions">
+                <a href="{{ url_for('create_discussion') }}" class="btn btn-primary">✏️ Buat Diskusi Baru</a>
+                <a href="{{ url_for('discussion_forum') }}" class="btn btn-outline">📚 Lihat Forum</a>
+            </div>
+        </div>
+
+        {% if discussions %}
+        <div class="discussions-grid">
+            {% for discussion in discussions %}
+            <div class="discussion-card {% if not discussion.is_public %}private{% endif %}">
+                <div class="discussion-header">
+                    <div class="discussion-meta">
+                        <h3><a href="{{ url_for('discussion_detail', discussion_id=discussion.id) }}">{{ discussion.title }}</a></h3>
+                        <span class="post-time">{{ discussion.created_at.strftime('%d %B %Y') }}</span>
+                    </div>
+                    <div class="discussion-stats">
+                        <span class="stat">💬 {{ discussion.comments|length }}</span>
+                        <span class="stat">❤️ {{ discussion.likes|length }}</span>
+                        {% if not discussion.is_public %}
+                        <span class="stat private">🔒</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <p class="discussion-preview">{{ discussion.content|truncate(150) }}</p>
+                
+                <div class="discussion-actions">
+                    <a href="{{ url_for('discussion_detail', discussion_id=discussion.id) }}" class="btn btn-outline btn-sm">Lihat</a>
+                    <form method="POST" action="{{ url_for('delete_discussion', discussion_id=discussion.id) }}" 
+                          onsubmit="return confirm('Hapus diskusi ini?')" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-discussions">
+            <h3>Anda belum membuat diskusi</h3>
+            <p>Mulai berbagi pemikiran dan pengalaman Anda dengan komunitas!</p>
+            <a href="{{ url_for('create_discussion') }}" class="btn btn-primary">Buat Diskusi Pertama</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.my-discussions {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.discussions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.discussion-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-left: 4px solid #667eea;
+    transition: transform 0.2s;
+}
+
+.discussion-card.private {
+    border-left-color: #ffc107;
+    background: #fffdf6;
+}
+
+.discussion-card:hover {
+    transform: translateY(-2px);
+}
+
+.discussion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+}
+
+.discussion-meta h3 {
+    margin: 0 0 5px 0;
+}
+
+.discussion-meta h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.discussion-meta h3 a:hover {
+    color: #667eea;
+}
+
+.post-time {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.discussion-stats {
+    display: flex;
+    gap: 10px;
+}
+
+.stat {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat.private {
+    color: #ffc107;
+}
+
+.discussion-preview {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.discussion-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.no-discussions {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.no-discussions h3 {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: start;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .discussions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .discussion-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .discussion-actions {
+        justify-content: flex-start;
+    }
+}
+</style>
+{% endblock %}

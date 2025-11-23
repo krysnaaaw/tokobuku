@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Books - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>📚 Manage Books</h1>
+            <p>Kelola katalog buku</p>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+        </div>
+
+        <div class="admin-content">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Seller</th>
+                            <th>Added</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                        <tr>
+                            <td>
+                                <div class="book-cell">
+                                    {% if book.image %}
+                                    <img src="{{ url_for('static', filename='uploads/' + book.image) }}" 
+                                         alt="{{ book.title }}" class="book-thumb">
+                                    {% else %}
+                                    <div class="book-thumb placeholder">📖</div>
+                                    {% endif %}
+                                    <div class="book-info">
+                                        <strong>{{ book.title }}</strong>
+                                        <span>{{ book.category.name }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ book.author }}</td>
+                            <td>Rp {{ "{:,.0f}".format(book.price) }}</td>
+                            <td>
+                                <span class="stock-badge {% if book.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                                    {{ book.stock }}
+                                </span>
+                            </td>
+                            <td>{{ book.seller.username }}</td>
+                            <td>{{ book.created_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin_delete_book', book_id=book.id) }}" 
+                                      onsubmit="return confirm('Hapus buku ini?')" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.book-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.book-thumb {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.book-thumb.placeholder {
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.book-info strong {
+    display: block;
+    color: #333;
+}
+
+.book-info span {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.stock-badge {
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.stock-badge.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-badge.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        min-width: 800px;
+    }
+}
+</style>
+{% endblock %}

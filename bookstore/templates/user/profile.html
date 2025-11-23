@@ -1,0 +1,52 @@
+={% extends "base.html" %}
+
+{% block title %}Profil - Toko Buku Online{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-header">
+        <h1>Profil Pengguna</h1>
+        <p>Kelola informasi akun Anda</p>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-card">
+            <h3>Informasi Akun</h3>
+            <form method="POST" action="{{ url_for('edit_profile') }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+                    <small>Tidak dapat mengubah username</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="member_since">Member sejak</label>
+                    <input type="text" class="form-control" id="member_since" 
+                           value="{{ user.created_at.strftime('%d %B %Y') }}" readonly>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Perbarui Profil</button>
+            </form>
+        </div>
+
+        <div class="profile-actions">
+            <div class="action-card">
+                <h4>Wishlist</h4>
+                <p>Lihat buku yang Anda simpan untuk dibeli nanti</p>
+                <a href="{{ url_for('wishlist') }}" class="btn btn-outline">Lihat Wishlist</a>
+            </div>
+            
+            <div class="action-card">
+                <h4>Keranjang Belanja</h4>
+                <p>Lanjutkan belanja Anda</p>
+                <a href="{{ url_for('cart') }}" class="btn btn-outline">Lihat Keranjang</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

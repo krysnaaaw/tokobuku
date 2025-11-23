@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Discussions - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>💬 Manage Discussions</h1>
+            <p>Moderasi forum diskusi</p>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+        </div>
+
+        <div class="admin-content">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Discussion</th>
+                            <th>Author</th>
+                            <th>Comments</th>
+                            <th>Likes</th>
+                            <th>Visibility</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for discussion in discussions %}
+                        <tr>
+                            <td>
+                                <div class="discussion-cell">
+                                    <strong>{{ discussion.title }}</strong>
+                                    <p class="discussion-preview">{{ discussion.content|truncate(100) }}</p>
+                                </div>
+                            </td>
+                            <td>{{ discussion.user.username }}</td>
+                            <td>{{ discussion.comments|length }}</td>
+                            <td>{{ discussion.likes|length }}</td>
+                            <td>
+                                <span class="visibility-badge {% if discussion.is_public %}public{% else %}private{% endif %}">
+                                    {{ 'Public' if discussion.is_public else 'Private' }}
+                                </span>
+                            </td>
+                            <td>{{ discussion.created_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin_delete_discussion', discussion_id=discussion.id) }}" 
+                                      onsubmit="return confirm('Hapus diskusi ini?')" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.discussion-cell strong {
+    display: block;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.discussion-preview {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.visibility-badge {
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.visibility-badge.public {
+    background: #d4edda;
+    color: #155724;
+}
+
+.visibility-badge.private {
+    background: #fff3cd;
+    color: #856404;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        min-width: 800px;
+    }
+}
+</style>
+{% endblock %}

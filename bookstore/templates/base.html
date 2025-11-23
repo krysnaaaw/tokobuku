@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Toko Buku Online{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <div class="nav-logo">
+                <a href="{{ url_for('index') }}">
+                    <span>📚</span>
+                    <span>TokoBuku</span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search">
+                <form action="{{ url_for('book_list') }}" method="GET">
+                    <input type="text" name="search" placeholder="Cari buku..." value="{{ request.args.get('search', '') }}">
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="navMenu">
+                <a href="{{ url_for('index') }}">🏠 Beranda</a>
+                <a href="{{ url_for('book_list') }}">📚 Katalog</a>
+                <a href="{{ url_for('discussion_forum') }}">💬 Forum</a>
+                
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('my_books') }}">📖 Buku Saya</a>
+                    <a href="{{ url_for('add_book') }}">➕ Tambah Buku</a>
+                    <a href="{{ url_for('cart') }}">🛒 Keranjang (<span id="cart-count">0</span>)</a>
+                    <a href="{{ url_for('wishlist') }}">❤️ Wishlist</a>
+                    <a href="{{ url_for('orders') }}">📦 Pesanan</a>
+                    <a href="{{ url_for('profile') }}">👤 Profil</a>
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin_dashboard') }}">🛠️ Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}">🚪 Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">🔐 Login</a>
+                    <a href="{{ url_for('register') }}">📝 Register</a>
+                {% endif %}
+            </div>
+
+            <!-- Hamburger Menu (Mobile) -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Toko Buku Online. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-container')) {
+                    if (hamburger) hamburger.classList.remove('active');
+                    if (navMenu) navMenu.classList.remove('active');
+                }
+            });
+
+            // Update cart count
+            async function updateCartCount() {
+                try {
+                    const response = await fetch('/api/cart/count');
+                    const data = await response.json();
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount && data.count !== undefined) {
+                        cartCount.textContent = data.count;
+                    }
+                } catch (error) {
+                    console.error('Error updating cart count:', error);
+                }
+            }
+
+            // Update cart count on page load
+            updateCartCount();
+        });
+    </script>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

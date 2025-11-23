@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Toko Buku Online{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Checkout</h1>
+    
+    <div class="checkout-layout">
+        <!-- Order Summary -->
+        <div class="checkout-summary">
+            <h3>Ringkasan Pesanan</h3>
+            <div class="order-items">
+                {% for item in cart_items %}
+                <div class="order-item">
+                    <div class="item-info">
+                        <h4>{{ item.Book.title }}</h4>
+                        <p>Oleh {{ item.Book.author }}</p>
+                        <p>Qty: {{ item.CartItem.quantity }} × Rp {{ "{:,.0f}".format(item.Book.price) }}</p>
+                    </div>
+                    <div class="item-total">
+                        Rp {{ "{:,.0f}".format(item.Book.price * item.CartItem.quantity) }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="order-total">
+                <h3>Total: Rp {{ "{:,.0f}".format(total) }}</h3>
+            </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="checkout-form">
+            <h3>Informasi Pengiriman & Pembayaran</h3>
+            <form method="POST" action="{{ url_for('process_checkout') }}">
+                <div class="form-group">
+                    <label for="shipping_address">Alamat Pengiriman</label>
+                    <textarea class="form-control" id="shipping_address" name="shipping_address" rows="4" required placeholder="Masukkan alamat lengkap pengiriman"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="payment_method">Metode Pembayaran</label>
+                    <select class="form-control" id="payment_method" name="payment_method" required>
+                        <option value="">Pilih Metode Pembayaran</option>
+                        <option value="transfer_bank">Transfer Bank</option>
+                        <option value="credit_card">Kartu Kredit</option>
+                        <option value="debit_card">Kartu Debit</option>
+                        <option value="e_wallet">E-Wallet (OVO, Gopay, Dana)</option>
+                        <option value="cod">Cash on Delivery (COD)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Catatan (Optional)</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Catatan untuk penjual..."></textarea>
+                </div>
+                
+                <div class="payment-instruction" id="payment_instruction" style="display: none;">
+                    <h4>Instruksi Pembayaran:</h4>
+                    <div id="bank_instruction" style="display: none;">
+                        <p>Silakan transfer ke:</p>
+                        <p><strong>Bank BCA: 123-456-7890 (Toko Buku Online)</strong></p>
+                        <p>Total: <strong>Rp {{ "{:,.0f}".format(total) }}</strong></p>
+                    </div>
+                    <div id="ewallet_instruction" style="display: none;">
+                        <p>Silakan bayar menggunakan e-wallet favorit Anda</p>
+                        <p>Total: <strong>Rp {{ "{:,.0f}".format(total) }}</strong></p>
+                    </div>
+                    <div id="cod_instruction" style="display: none;">
+                        <p>Bayar ketika pesanan sampai di alamat Anda</p>
+                        <p>Total: <strong>Rp {{ "{:,.0f}".format(total) }}</strong></p>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <a href="{{ url_for('cart') }}" class="btn btn-outline">Kembali ke Keranjang</a>
+                    <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethod = document.getElementById('payment_method');
+    const paymentInstruction = document.getElementById('payment_instruction');
+    const bankInstruction = document.getElementById('bank_instruction');
+    const ewalletInstruction = document.getElementById('ewallet_instruction');
+    const codInstruction = document.getElementById('cod_instruction');
+    
+    function showPaymentInstruction() {
+        const method = paymentMethod.value;
+        paymentInstruction.style.display = method ? 'block' : 'none';
+        
+        // Hide all instructions first
+        bankInstruction.style.display = 'none';
+        ewalletInstruction.style.display = 'none';
+        codInstruction.style.display = 'none';
+        
+        // Show relevant instruction
+        if (method === 'transfer_bank') {
+            bankInstruction.style.display = 'block';
+        } else if (method === 'e_wallet') {
+            ewalletInstruction.style.display = 'block';
+        } else if (method === 'cod') {
+            codInstruction.style.display = 'block';
+        }
+    }
+    
+    paymentMethod.addEventListener('change', showPaymentInstruction);
+});
+</script>
+
+<style>
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.checkout-summary {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.order-items {
+    margin: 20px 0;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 15px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.item-info p {
+    margin: 2px 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.item-total {
+    font-weight: bold;
+    color: #2c5aa0;
+}
+
+.order-total {
+    border-top: 2px solid #2c5aa0;
+    padding-top: 15px;
+    text-align: right;
+}
+
+.checkout-form {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.payment-instruction {
+    background: #e7f3ff;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border-left: 4px solid #2c5aa0;
+}
+
+.checkout-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.checkout-actions .btn {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkout-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

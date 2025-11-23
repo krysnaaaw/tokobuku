@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Katalog Buku - Toko Buku Online{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Katalog Buku</h1>
+        <p>Temukan buku favorit Anda di sini</p>
+    </div>
+
+    <div class="catalog-layout">
+        <!-- Sidebar Filters -->
+        <div class="sidebar">
+            <div class="filter-section">
+                <h3>Kategori</h3>
+                <div class="category-list">
+                    <a href="{{ url_for('book_list') }}" class="category-item {% if not request.args.get('category_id') %}active{% endif %}">
+                        Semua Kategori
+                    </a>
+                    {% for category in categories %}
+                    <a href="{{ url_for('book_list', category_id=category.id) }}" 
+                       class="category-item {% if request.args.get('category_id')|int == category.id %}active{% endif %}">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="books-header">
+                <h2>Daftar Buku ({{ books|length }} hasil)</h2>
+            </div>
+
+            {% if books %}
+            <div class="books-grid">
+                {% for book in books %}
+                <div class="book-card">
+                    {% if book.image %}
+                    <img src="{{ url_for('static', filename='uploads/' + book.image) }}" alt="{{ book.title }}">
+                    {% else %}
+                    <div class="book-placeholder">📖</div>
+                    {% endif %}
+                    <div class="book-info">
+                        <h3>{{ book.title }}</h3>
+                        <p class="book-author">Oleh {{ book.author }}</p>
+                        <p class="book-price">Rp {{ "{:,.0f}".format(book.price) }}</p>
+                        <p class="book-stock">Stok: {{ book.stock }}</p>
+                        <div class="book-actions">
+                            <a href="{{ url_for('book_detail', book_id=book.id) }}" class="btn btn-outline">Detail</a>
+                            {% if session.get('user_id') %}
+                            <button class="btn btn-primary add-to-cart" data-book-id="{{ book.id }}">
+                                + Keranjang
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-books">
+                <h3>Tidak ada buku yang ditemukan</h3>
+                <p>Coba gunakan kata kunci pencarian yang berbeda atau lihat kategori lain.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookId = this.dataset.bookId;
+            cartManager.addToCart(bookId);
+        });
+    });
+});
+</script>
+{% endblock %}

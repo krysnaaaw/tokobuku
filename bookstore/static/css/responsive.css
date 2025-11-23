@@ -1,0 +1,59 @@
+/* Additional responsive styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero-section {
+        padding: 60px 0;
+        border-radius: 0 0 30px 30px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .form-control {
+        padding: 12px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .book-info {
+        padding: 15px;
+    }
+    
+    .book-actions {
+        flex-direction: column;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .footer,
+    .btn {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin: 0;
+        padding: 0;
+    }
+}

@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block title %}{{ discussion.title }} - Forum Diskusi{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="discussion-detail">
+        <!-- Discussion Header -->
+        <div class="discussion-header">
+            <a href="{{ url_for('discussion_forum') }}" class="back-link">← Kembali ke Forum</a>
+            
+            <div class="discussion-meta">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ discussion.user.username[0]|upper }}
+                    </div>
+                    <div class="user-details">
+                        <strong>{{ discussion.user.username }}</strong>
+                        <span class="post-time">{{ discussion.created_at.strftime('%d %B %Y %H:%M') }}</span>
+                    </div>
+                </div>
+                
+                <div class="discussion-actions">
+                    {% if discussion.user_id == session.get('user_id') or session.get('is_admin') %}
+                    <form method="POST" action="{{ url_for('delete_discussion', discussion_id=discussion.id) }}" 
+                          onsubmit="return confirm('Hapus diskusi ini?')" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                    {% endif %}
+                    
+                    {% if session.get('user_id') %}
+                    <button class="btn btn-outline like-btn {% if user_liked %}liked{% endif %}" 
+                            data-discussion-id="{{ discussion.id }}">
+                        ❤️ <span class="like-count">{{ discussion.likes|length }}</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h1>{{ discussion.title }}</h1>
+            
+            {% if not discussion.is_public %}
+            <div class="private-badge">
+                🔒 Private Discussion
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Discussion Content -->
+        <div class="discussion-content">
+            <div class="content-body">
+                {{ discussion.content|replace('\n', '<br>')|safe }}
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <h3>💬 Komentar ({{ comments|length }})</h3>
+            
+            {% if session.get('user_id') %}
+            <div class="comment-form">
+                <form method="POST" action="{{ url_for('add_comment', discussion_id=discussion.id) }}">
+                    <div class="form-group">
+                        <textarea class="form-control" name="content" rows="4" 
+                                  placeholder="Tulis komentar Anda..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="login-prompt">
+                <a href="{{ url_for('login') }}">Login</a> untuk menambahkan komentar
+            </div>
+            {% endif %}
+
+            <div class="comments-list">
+                {% for comment in comments %}
+                <div class="comment-card" data-comment-id="{{ comment.id }}">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="user-avatar small">
+                                {{ comment.user.username[0]|upper }}
+                            </div>
+                            <div class="user-details">
+                                <strong>{{ comment.user.username }}</strong>
+                                <span class="comment-time">{{ comment.created_at.strftime('%d %B %Y %H:%M') }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if session.get('user_id') %}
+                        <button class="btn btn-outline btn-sm comment-like-btn" 
+                                data-comment-id="{{ comment.id }}">
+                            👍 <span class="comment-like-count">{{ comment.likes|length }}</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="comment-content">
+                        {{ comment.content|replace('\n', '<br>')|safe }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="no-comments">
+                    <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Like discussion functionality
+    const likeBtn = document.querySelector('.like-btn');
+    if (likeBtn) {
+        likeBtn.addEventListener('click', function() {
+            const discussionId = this.dataset.discussionId;
+            
+            fetch('/discussion/' + discussionId + '/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likeCount = this.querySelector('.like-count');
+                    likeCount.textContent = data.like_count;
+                    
+                    if (data.action === 'like') {
+                        this.classList.add('liked');
+                        this.innerHTML = '❤️ <span class="like-count">' + data.like_count + '</span>';
+                    } else {
+                        this.classList.remove('liked');
+                        this.innerHTML = '❤️ <span class="like-count">' + data.like_count + '</span>';
+                    }
+                }
+            });
+        });
+    }
+
+    // Like comment functionality
+    document.querySelectorAll('.comment-like-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const commentId = this.dataset.commentId;
+            
+            fetch('/comment/' + commentId + '/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likeCount = this.querySelector('.comment-like-count');
+                    likeCount.textContent = data.like_count;
+                }
+            });
+        });
+    });
+});
+</script>
+
+<style>
+.discussion-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.back-link {
+    color: #667eea;
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.discussion-header {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.discussion-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.user-avatar.small {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+}
+
+.user-details strong {
+    display: block;
+    color: #333;
+}
+
+.post-time, .comment-time {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.discussion-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.like-btn.liked {
+    background: #ff4757;
+    color: white;
+    border-color: #ff4757;
+}
+
+.discussion-header h1 {
+    margin: 0;
+    color: #333;
+    line-height: 1.4;
+}
+
+.private-badge {
+    display: inline-block;
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.discussion-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.content-body {
+    line-height: 1.8;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.comments-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.comments-section h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.comment-form {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.comments-list {
+    space-y: 15px;
+}
+
+.comment-card {
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-content {
+    line-height: 1.6;
+    color: #333;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 20px;
+    background: #e7f3ff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .discussion-meta {
+        flex-direction: column;
+        gap: 15px;
+        align-items: start;
+    }
+    
+    .discussion-header,
+    .discussion-content,
+    .comments-section {
+        padding: 20px;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: start;
+    }
+}
+</style>
+{% endblock %}

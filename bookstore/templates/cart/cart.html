@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Keranjang Belanja - Toko Buku Online{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Keranjang Belanja</h1>
+    
+    {% if cart_items %}
+    <div class="cart-items">
+        {% for item in cart_items %}
+        <div class="cart-item" data-item-id="{{ item.CartItem.id }}">
+            {% if item.Book.image %}
+            <img src="{{ url_for('static', filename='uploads/' + item.Book.image) }}" 
+                 alt="{{ item.Book.title }}" class="cart-item-image">
+            {% else %}
+            <div class="cart-item-placeholder">📖</div>
+            {% endif %}
+            
+            <div class="cart-item-details">
+                <h3>{{ item.Book.title }}</h3>
+                <p class="cart-item-author">Oleh {{ item.Book.author }}</p>
+                <p class="cart-item-price">Rp {{ "{:,.0f}".format(item.Book.price) }}</p>
+            </div>
+            
+            <div class="cart-quantity">
+                <button class="quantity-btn decrease-btn" data-item-id="{{ item.CartItem.id }}">-</button>
+                <span class="quantity-display">{{ item.CartItem.quantity }}</span>
+                <button class="quantity-btn increase-btn" data-item-id="{{ item.CartItem.id }}">+</button>
+            </div>
+            
+            <div class="cart-item-total">
+                Rp <span class="item-total-amount">{{ "{:,.0f}".format(item.Book.price * item.CartItem.quantity) }}</span>
+            </div>
+            
+            <button class="btn btn-danger remove-btn" data-item-id="{{ item.CartItem.id }}">Hapus</button>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="cart-total">
+        <h3>Total: Rp <span id="cart-total-amount">{{ "{:,.0f}".format(total) }}</span></h3>
+        <button class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <h2>Keranjang belanja kosong</h2>
+        <p>Silakan tambahkan buku ke keranjang belanja Anda.</p>
+        <a href="{{ url_for('book_list') }}" class="btn btn-primary">Jelajahi Buku</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function checkout() {
+    alert('Fitur checkout akan segera datang!');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Update quantity
+    document.querySelectorAll('.quantity-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.dataset.itemId;
+            const action = this.classList.contains('increase-btn') ? 'increase' : 
+                          this.classList.contains('decrease-btn') ? 'decrease' : 'remove';
+            
+            updateCartItem(itemId, action);
+        });
+    });
+    
+    // Remove item
+    document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.dataset.itemId;
+            if (confirm('Hapus item dari keranjang?')) {
+                updateCartItem(itemId, 'remove');
+            }
+        });
+    });
+    
+    function updateCartItem(itemId, action) {
+        fetch('/update_cart_item/' + itemId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update UI
+                const itemElement = document.querySelector(`.cart-item[data-item-id="${itemId}"]`);
+                
+                if (action === 'remove') {
+                    itemElement.remove();
+                } else {
+                    const quantityDisplay = itemElement.querySelector('.quantity-display');
+                    const itemTotal = itemElement.querySelector('.item-total-amount');
+                    
+                    quantityDisplay.textContent = data.new_quantity;
+                    itemTotal.textContent = data.item_total.toLocaleString();
+                }
+                
+                // Update total
+                document.getElementById('cart-total-amount').textContent = data.total.toLocaleString();
+                
+                // Update cart count
+                cartManager.updateCartCount();
+                
+                // If cart is empty, show empty message
+                if (document.querySelectorAll('.cart-item').length === 0) {
+                    location.reload();
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat update keranjang');
+        });
+    }
+});
+</script>
+{% endblock %}  

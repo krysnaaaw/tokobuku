@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Home - BookStore{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Selamat Datang di BookStore</h1>
+        <p>Temukan buku-buku terbaik untuk koleksi Anda</p>
+        <!-- PERBAIKI: books.book_list -->
+        <a href="{{ url_for('book_list') }}" class="btn btn-primary">Jelajahi Buku</a>
+    </div>
+</div>
+
+<div class="featured-books">
+    <h2>Buku Terbaru</h2>
+    <div class="books-grid">
+        {% for book in books %}
+        <div class="book-card">
+            {% if book.image %}
+            <img src="{{ url_for('static', filename='uploads/' + book.image) }}" alt="{{ book.title }}">
+            {% else %}
+            <div class="book-placeholder">No Image</div>
+            {% endif %}
+            <div class="book-info">
+                <h3>{{ book.title }}</h3>
+                <p class="book-author">oleh {{ book.author }}</p>
+                <p class="book-price">Rp {{ "{:,.0f}".format(book.price) }}</p>
+                <!-- PERBAIKI: books.book_detail -->
+                <a href="{{ url_for('book_detail', book_id=book.id) }}" class="btn btn-secondary">Lihat Detail</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
